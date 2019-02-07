@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <!--цвета взяты из видио о цветах в твин пиксе-->
+    <color name="colorPrimary">#5D120C</color>
+    <color name="colorPrimaryDark">#3A0400</color>
+    <color name="colorAccent">#1C1003</color>
+    <color name="floorColor">#9C878E</color>
+
+    <!--element colors-->
+    <color name="buttonColor">@color/colorAccent</color>
 </resources>

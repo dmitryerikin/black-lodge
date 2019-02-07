@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="200dp"
+    android:width="112dp"
+    android:viewportHeight="1920"
+    android:viewportWidth="1050">
+
+    <path
+        android:name="first_row"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M 0,0 L 150,100 300,0 450,100 600,0 750,100 900,0 1050,100 1050,200
+        900,100 750,200 600,100 450,200 300,100 150,200 0,100 z" />
+
+    <path
+        android:name="second_row"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M 0,200 L 150,300 300,200 450,300 600,200 750,300 900,200 1050,300 1050,400
+        900,300 750,400 600,300 450,400 300,300 150,400 0,300 z" />
+
+    <path
+        android:name="third_row"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M 0,400 L 150,500 300,400 450,500 600,400 750,500 900,400 1050,500 1050,600
+        900,500 750,600 600,500 450,600 300,500 150,600 0,500 z" />
+
+    <path
+        android:name="fourth_row"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M 0,600 L 150,700 300,600 450,700 600,600 750,700 900,600 1050,700 1050,800
+        900,700 750,800 600,700 450,800 300,700 150,800 0,700 z" />
+
+    <path
+        android:name="fifth_row"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M 0,800 L 150,900 300,800 450,900 600,800 750,900 900,800 1050,900 1050,1000
+        900,900 750,1000 600,900 450,1000 300,900 150,1000 0,900 z" />
+
+    <path
+        android:name="sixth_row"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M 0,1000 L 150,1100 300,1000 450,1100 600,1000 750,1100 900,1000 1050,1100 1050,1200
+        900,1100 750,1200 600,1100 450,1200 300,1100 150,1200 0,1100 z" />
+
+    <path
+        android:name="seventh_row"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M 0,1200 L 150,1300 300,1200 450,1300 600,1200 750,1300 900,1200 1050,1300 1050,1400
+        900,1300 750,1400 600,1300 450,1400 300,1300 150,1400 0,1300 z" />
+
+    <path
+        android:name="eighth_row"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M 0,1400 L 150,1500 300,1400 450,1500 600,1400 750,1500 900,1400 1050,1500 1050,1600
+        900,1500 750,1600 600,1500 450,1600 300,1500 150,1600 0,1500 z" />
+
+    <path
+        android:name="ninth_row"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M 0,1600 L 150,1700 300,1600 450,1700 600,1600 750,1700 900,1600 1050,1700 1050,1800
+        900,1700 750,1800 600,1700 450,1800 300,1700 150,1800 0,1700 z" />
+
+    <path
+        android:name="tenth_row"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M 0,1800 L 150,1900 300,1800 450,1900 600,1800 750,1900 900,1800 1050,1900 1050,2000
+        900,1900 750,2000 600,1900 450,2000 300,1900 150,2000 0,1900 z" />
+
+
+
+
+
+
+</vector>
