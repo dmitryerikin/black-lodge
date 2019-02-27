@@ -53,17 +53,18 @@ public class AudioRecorder {
     /**
      *
      * @param config - AudioConfig object
-     * @param filePath - file path where to write
+     * @param file - file where to write
      * @throws AudioRecordException - if AudioRecorder has not been initialized
-     * @throws FileNotFoundException - if @param config has not been found
+     * @throws FileNotFoundException - if file isn't exist
      */
 
-    public AudioRecorder(AudioConfig config, String filePath) throws AudioRecordException, FileNotFoundException {
+    public AudioRecorder(AudioConfig config, File file) throws AudioRecordException, FileNotFoundException {
+        Log.d(TAG, "AudioRecorder: ");
         mConfig = config;
-        mFilePath = filePath;
-        mFile = new File(mFilePath);
+        mFile = file;
         if (!mFile.exists())
             throw new FileNotFoundException();
+
         mMinBufferSize = AudioRecord.getMinBufferSize(mConfig.getSampleRate(),
                 mConfig.getChannelConfig(), mConfig.getAudioFormat());
 
@@ -80,6 +81,7 @@ public class AudioRecorder {
     }
 
     public void initThread() {
+        Log.d(TAG, "initThread: ");
         mThread = new Thread(
                 new Runnable() {
                     @Override
@@ -89,41 +91,50 @@ public class AudioRecorder {
                             eightBitPcmRecording();
                         else if (mConfig.getAudioFormat() == AudioFormat.ENCODING_PCM_16BIT)
                             sixteenBitPcmRecording();
-                        Log.d(TAG, "run: Thread is dead");
+                        Log.d(TAG, "run: end of thread");
                     }
                 }
         );
     }
 
     public void record() {
+        Log.d(TAG, "record: ");
         mShouldContinue = true;
         initThread();
         mThread.start();
     }
 
     public void stop() {
+        Log.d(TAG, "stop: ");
         mShouldContinue = false;
         mThread = null;
     }
 
     public void destroy() {
+        Log.d(TAG, "destroy: ");
         mAudioRecord.release();
         mAudioRecord = null;
     }
 
     public int getState() {
+        Log.d(TAG, "getState: ");
         return mAudioRecord.getRecordingState();
     }
 
     private void eightBitPcmRecording() {
-        byte[] buffer = new byte[mMinBufferSize / 4];
+        Log.d(TAG, "eightBitPcmRecording: ");
+        byte[] buffer = new byte[mArrayBufferSize / 2];
+        int bytesRead;
+        long totalBytesRead = 0L;
         mAudioRecord.startRecording();
-        Log.d(TAG, "eightBitPcmRecording: Record started");
         try (FileOutputStream fos = new FileOutputStream(mFile)) {
             while(mShouldContinue) {
-                mAudioRecord.read(buffer, 0, buffer.length);
+                bytesRead = mAudioRecord.read(buffer, 0, buffer.length);
+                totalBytesRead += (long) bytesRead;
                 fos.write(buffer);
             }
+            Log.d(TAG, "eightBitPcmRecording: total bytes read: " + totalBytesRead);
+            Log.d(TAG, "eightBitPcmRecording: file length in bytes: " + mFile.length());
         } catch (FileNotFoundException fnfe) {
             Log.e(TAG, "FileNotFoundException while create FileOutputStream");
             fnfe.printStackTrace();
@@ -136,18 +147,24 @@ public class AudioRecorder {
     }
 
     private void sixteenBitPcmRecording() {
-        short[] shortArray = new short[mArrayBufferSize / 4];
+        Log.d(TAG, "sixteenBitPcmRecording: ");
+        short[] shortArray = new short[mArrayBufferSize];
         ByteBuffer byteBuffer = ByteBuffer.allocate(shortArray.length * 2);
-        try (FileOutputStream fos = new FileOutputStream(mFile)){
-            mAudioRecord.startRecording();
+        int shortsRead;
+        long totalShortsRead = 0L;
+        mAudioRecord.startRecording();
+        try (FileOutputStream fos = new FileOutputStream(mFile)) {
             while (mShouldContinue) {
-                mAudioRecord.read(shortArray, 0, shortArray.length);
-                byteBuffer.position(0);
+                shortsRead = mAudioRecord.read(shortArray, 0, shortArray.length);
+                totalShortsRead += (long) shortsRead;
+                byteBuffer.clear();
                 for(short s : shortArray) {
                     byteBuffer.putShort(s);
                 }
                 fos.write(byteBuffer.order(ByteOrder.nativeOrder()).array());
             }
+            Log.d(TAG, "sixteenBitPcmRecording: total bytes read: " + totalShortsRead * 2);
+            Log.d(TAG, "sixteenBitPcmRecording: file length in bytes: " + mFile.length());
         } catch (FileNotFoundException fnfe) {
             Log.e(TAG, "FileNotFoundException while create FileOutputStream");
             fnfe.printStackTrace();
