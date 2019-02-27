@@ -108,19 +108,29 @@ public class AudioPlayer {
         return mAudioTrack.getPlayState();
     }
 
+    public void setFile(File file) {
+        mFile = file;
+    }
+
     public void setOnPlayEndListener(Runnable onPlayEndListener) {
         mOnPlayEndListener = onPlayEndListener;
     }
 
     private void eightBitPcmPlaying() {
-        byte[] buffer = new byte[mMinBufferSize / 4];
+        Log.d(TAG, "eightBitPcmPlaying: ");
+        byte[] buffer = new byte[mArrayBufferSize];
+        int bytesRead;
+        long totalBytesRead = 0L;
         mAudioTrack.play();
         try(FileInputStream fis = new FileInputStream(mFile)) {
             while (mShouldContinue) {
-                if(fis.read(buffer) == -1)
+                if((bytesRead = fis.read(buffer)) == -1)
                     break;
+                totalBytesRead += (long) bytesRead;
                 mAudioTrack.write(buffer, 0, buffer.length);
             }
+            Log.d(TAG, "eightBitPcmPlaying: total bytes read: " + totalBytesRead);
+            Log.d(TAG, "eightBitPcmPlaying: file size in bytes: " + mFile.length());
             if(mOnPlayEndListener != null)
                 mOnPlayEndListener.run();
         } catch (FileNotFoundException fnfe) {
@@ -135,17 +145,24 @@ public class AudioPlayer {
     }
 
     private void sixteenBitPcmPlaying() {
+        Log.d(TAG, "sixteenBitPcmPlaying: ");
         byte[] byteArray = new byte[mArrayBufferSize];
         short[] shortArray = new short[byteArray.length / 2];
         ByteBuffer byteBuffer = ByteBuffer.wrap(byteArray);
+        int bytesRead;
+        long totalBytesRead = 0L;
+        mAudioTrack.play();
         try(FileInputStream fis = new FileInputStream(mFile)) {
-            mAudioTrack.play();
             while (mShouldContinue) {
-                if(fis.read(byteArray) == -1)
+
+                if((bytesRead = fis.read(byteArray)) == -1)
                     break;
+                totalBytesRead += (long) bytesRead;
                 ((ShortBuffer) (byteBuffer.order(ByteOrder.nativeOrder()).asShortBuffer().position(0))).get(shortArray);
-                mAudioTrack.write(shortArray, 0, shortArray.length);
+                mAudioTrack.write(shortArray, 0, bytesRead / 2);
             }
+            Log.d(TAG, "sixteenBitPcmPlaying: total bytes read: " + totalBytesRead + " = " + totalBytesRead / 4 + " frames ");
+            Log.d(TAG, "sixteenBitPcmPlaying: file length in bytes: " + mFile.length());
             if(mOnPlayEndListener != null)
                 mOnPlayEndListener.run();
         } catch (FileNotFoundException fnfe) {
