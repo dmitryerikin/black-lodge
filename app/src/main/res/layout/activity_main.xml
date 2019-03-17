@@ -62,17 +62,17 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
-        android:inputType="textMultiLine"
         android:gravity="center"
-        android:textSize="20sp"
-        android:textColor="@color/floorColor"
         android:hint="@string/text_view_hint"
+        android:inputType="textMultiLine"
+        android:textColor="@color/floorColor"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/text_view_hint"/>
+        tools:text="@string/text_view_hint" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
@@ -81,18 +81,18 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.6" />
 
-    <SeekBar
-        android:id="@+id/seek_bar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+    <!--<SeekBar-->
+        <!--android:id="@+id/seek_bar"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/guideline2"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/guideline" />-->
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
@@ -101,7 +101,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.8" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/current_time_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="@+id/seek_bar"
         app:layout_constraintTop_toBottomOf="@+id/seek_bar"
-        tools:text="@string/audio_length_text_view_tool_text"/>
+        tools:text="@string/audio_length_text_view_tool_text"/>-->
 
 </android.support.constraint.ConstraintLayout>
 

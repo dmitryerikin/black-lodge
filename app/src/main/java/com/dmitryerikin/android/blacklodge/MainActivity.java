@@ -1,20 +1,14 @@
 package com.dmitryerikin.android.blacklodge;
 
-import android.Manifest;
-import android.animation.TimeInterpolator;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewPropertyAnimator;
-import android.view.animation.CycleInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -110,28 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 mAudioRecorderConfig);
     }
 
-    private void setupAudioToolsListeners() {
-        mAudioPlayer.setOnPlayEndListener(new Runnable() {
-            @Override
-            public void run() {
-                mPlayButton.setImageResource(R.drawable.ic_button_play);
-                mRecordButton.setEnabled(!mRecordButton.isEnabled());
-                mReverseButton.setEnabled(!mReverseButton.isEnabled());
-                //shortToast("Playing has been stopped");
-            }
-        });
-
-        mAudioReverser.addOnCompletionListener(new AudioReverser.OnCompletionListener() {
-            @Override
-            public void onComplete() {
-                mReverseButton.setEnabled(!mReverseButton.isEnabled());
-                mRecordButton.setEnabled(!mRecordButton.isEnabled());
-                mPlayButton.setEnabled(!mPlayButton.isEnabled());
-                //shortToast("Reversing has been ended");
-            }
-        });
-    }
-
     private void initViews() {
         mRecordButton = findViewById(R.id.record_button);
         mPlayButton = findViewById(R.id.play_button);
@@ -193,9 +165,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mEditText.setEnabled(false);
+        mEditText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mEditText.setText(new StringBuilder(mEditText.getText().toString()).reverse());
+                mEditText.setHint(new StringBuilder(mEditText.getHint().toString()).reverse());
+                return true;
+            }
+        });
+    }
 
+    private void setupAudioToolsListeners() {
+        mAudioPlayer.setOnPlayEndListener(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPlayButton.setImageResource(R.drawable.ic_button_play);
+                        mRecordButton.setEnabled(!mRecordButton.isEnabled());
+                        mReverseButton.setEnabled(!mReverseButton.isEnabled());
+                        shortToast("Playing has been stopped");
+                    }
+                });
+            }
+        });
 
+        mAudioReverser.addOnCompletionListener(new AudioReverser.OnCompletionListener() {
+            @Override
+            public void onComplete() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mReverseButton.setEnabled(!mReverseButton.isEnabled());
+                        mRecordButton.setEnabled(!mRecordButton.isEnabled());
+                        mPlayButton.setEnabled(!mPlayButton.isEnabled());
+                        shortToast("Reversing has been ended");
+                    }
+                });
+            }
+        });
     }
 
     private void shortToast(String text) {
