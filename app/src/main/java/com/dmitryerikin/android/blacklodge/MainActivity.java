@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
         }
-        Log.d(TAG, "AudioRecorder state is " + String.valueOf(mAudioRecorder.getState()));
+        if(mAudioRecorder != null)
+            Log.d(TAG, "AudioRecorder state is " + String.valueOf(mAudioRecorder.getState()));
         try {
             mAudioPlayer = new AudioPlayer(mAudioPlayerConfig, mAppDirectory.getPath() + "/" + ORIGINAL_AUDIO_FILENAME);
         } catch (AudioRecordException are) {
@@ -98,7 +99,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
         }
-        Log.d(TAG, "AudioPlayer state is " + String.valueOf(mAudioPlayer.getState()));
+
+        if(mAudioPlayer != null)
+            Log.d(TAG, "AudioPlayer state is " + String.valueOf(mAudioPlayer.getState()));
 
         mAudioReverser = new AudioReverser(mOriginalAudioFile, mReversedAudioFile,
                 mAudioRecorderConfig);
