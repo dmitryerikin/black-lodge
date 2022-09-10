@@ -1,18 +1,14 @@
 package com.dmitryerikin.android.blacklodge;
 
-import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
-import android.os.Handler;
 import android.util.Log;
 
 import com.dmitryerikin.android.blacklodge.Exceptions.AudioRecordException;
-import com.dmitryerikin.android.blacklodge.Utilities.ArrayConverter;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,7 +16,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
-import java.util.Arrays;
 
 public class AudioPlayer {
 

@@ -1,17 +1,16 @@
 package com.dmitryerikin.android.blacklodge;
 
-import android.content.DialogInterface;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
-import android.os.Environment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.dmitryerikin.android.blacklodge.Exceptions.AudioRecordException;
 
@@ -110,101 +109,73 @@ public class MainActivity extends AppCompatActivity {
         mReverseButton = findViewById(R.id.reverse_button);
         mEditText = findViewById(R.id.edit_text);
 
-        mRecordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mAudioPlayer.getState() != AudioTrack.PLAYSTATE_PLAYING) {
-                    if (mAudioRecorder.getState() == AudioRecord.RECORDSTATE_STOPPED) {
-                        mRecordButton.setImageResource(R.drawable.ic_button_stop);
-                        mPlayButton.setEnabled(!mPlayButton.isEnabled());
-                        mReverseButton.setEnabled(!mReverseButton.isEnabled());
-                        shortToast("Record has been started");
-                        mAudioRecorder.record();
-                    } else if (mAudioRecorder.getState() == AudioRecord.RECORDSTATE_RECORDING) {
-                        mRecordButton.setImageResource(R.drawable.ic_button_record);
-                        mPlayButton.setEnabled(!mPlayButton.isEnabled());
-                        mReverseButton.setEnabled(!mReverseButton.isEnabled());
-                        shortToast("Record has been stopped");
-                        mAudioRecorder.stop();
-                    }
+        mRecordButton.setOnClickListener(v -> {
+            if(mAudioPlayer.getState() != AudioTrack.PLAYSTATE_PLAYING) {
+                if (mAudioRecorder.getState() == AudioRecord.RECORDSTATE_STOPPED) {
+                    mRecordButton.setImageResource(R.drawable.ic_button_stop);
+                    mPlayButton.setEnabled(!mPlayButton.isEnabled());
+                    mReverseButton.setEnabled(!mReverseButton.isEnabled());
+                    shortToast("Record has been started");
+                    mAudioRecorder.record();
+                } else if (mAudioRecorder.getState() == AudioRecord.RECORDSTATE_RECORDING) {
+                    mRecordButton.setImageResource(R.drawable.ic_button_record);
+                    mPlayButton.setEnabled(!mPlayButton.isEnabled());
+                    mReverseButton.setEnabled(!mReverseButton.isEnabled());
+                    shortToast("Record has been stopped");
+                    mAudioRecorder.stop();
                 }
             }
         });
 
-        mPlayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mAudioRecorder.getState() != AudioRecord.RECORDSTATE_RECORDING) {
-                    if (mAudioPlayer.getState() == AudioTrack.PLAYSTATE_STOPPED) {
-                        if(mReversed)
-                            mAudioPlayer.setFile(mReversedAudioFile);
-                        else
-                            mAudioPlayer.setFile(mOriginalAudioFile);
+        mPlayButton.setOnClickListener(v -> {
+            if(mAudioRecorder.getState() != AudioRecord.RECORDSTATE_RECORDING) {
+                if (mAudioPlayer.getState() == AudioTrack.PLAYSTATE_STOPPED) {
+                    if(mReversed)
+                        mAudioPlayer.setFile(mReversedAudioFile);
+                    else
+                        mAudioPlayer.setFile(mOriginalAudioFile);
 
-                        shortToast("Playing has been started");
-                        mAudioPlayer.play();
-                        mPlayButton.setImageResource(R.drawable.ic_button_stop);
-                        mRecordButton.setEnabled(!mRecordButton.isEnabled());
-                        mReverseButton.setEnabled(!mReverseButton.isEnabled());
-                    } else if (mAudioPlayer.getState() == AudioTrack.PLAYSTATE_PLAYING) {
-                        mAudioPlayer.stop();
-                    }
+                    shortToast("Playing has been started");
+                    mAudioPlayer.play();
+                    mPlayButton.setImageResource(R.drawable.ic_button_stop);
+                    mRecordButton.setEnabled(!mRecordButton.isEnabled());
+                    mReverseButton.setEnabled(!mReverseButton.isEnabled());
+                } else if (mAudioPlayer.getState() == AudioTrack.PLAYSTATE_PLAYING) {
+                    mAudioPlayer.stop();
                 }
             }
         });
 
-        mReverseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAudioReverser.reverse();
-                mReversed = !mReversed;
-                mReverseButton.setEnabled(!mReverseButton.isEnabled());
-                mRecordButton.setEnabled(!mRecordButton.isEnabled());
-                mPlayButton.setEnabled(!mPlayButton.isEnabled());
-                shortToast("Reversing has been started");
-            }
+        mReverseButton.setOnClickListener(v -> {
+            mAudioReverser.reverse();
+            mReversed = !mReversed;
+            mReverseButton.setEnabled(!mReverseButton.isEnabled());
+            mRecordButton.setEnabled(!mRecordButton.isEnabled());
+            mPlayButton.setEnabled(!mPlayButton.isEnabled());
+            shortToast("Reversing has been started");
         });
 
-        mEditText.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                mEditText.setText(new StringBuilder(mEditText.getText().toString()).reverse());
-                mEditText.setHint(new StringBuilder(mEditText.getHint().toString()).reverse());
-                return true;
-            }
+        mEditText.setOnLongClickListener(v -> {
+            mEditText.setText(new StringBuilder(mEditText.getText().toString()).reverse());
+            mEditText.setHint(new StringBuilder(mEditText.getHint().toString()).reverse());
+            return true;
         });
     }
 
     private void setupAudioToolsListeners() {
-        mAudioPlayer.setOnPlayEndListener(new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPlayButton.setImageResource(R.drawable.ic_button_play);
-                        mRecordButton.setEnabled(!mRecordButton.isEnabled());
-                        mReverseButton.setEnabled(!mReverseButton.isEnabled());
-                        shortToast("Playing has been stopped");
-                    }
-                });
-            }
-        });
+        mAudioPlayer.setOnPlayEndListener(() -> runOnUiThread(() -> {
+            mPlayButton.setImageResource(R.drawable.ic_button_play);
+            mRecordButton.setEnabled(!mRecordButton.isEnabled());
+            mReverseButton.setEnabled(!mReverseButton.isEnabled());
+            shortToast("Playing has been stopped");
+        }));
 
-        mAudioReverser.addOnCompletionListener(new AudioReverser.OnCompletionListener() {
-            @Override
-            public void onComplete() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mReverseButton.setEnabled(!mReverseButton.isEnabled());
-                        mRecordButton.setEnabled(!mRecordButton.isEnabled());
-                        mPlayButton.setEnabled(!mPlayButton.isEnabled());
-                        shortToast("Reversing has been ended");
-                    }
-                });
-            }
-        });
+        mAudioReverser.addOnCompletionListener(() -> runOnUiThread(() -> {
+            mReverseButton.setEnabled(!mReverseButton.isEnabled());
+            mRecordButton.setEnabled(!mRecordButton.isEnabled());
+            mPlayButton.setEnabled(!mPlayButton.isEnabled());
+            shortToast("Reversing has been ended");
+        }));
     }
 
     private void shortToast(String text) {
@@ -214,12 +185,7 @@ public class MainActivity extends AppCompatActivity {
     private void showAppClosingDialog(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message)
-                .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
+                .setNeutralButton("Ok", (dialog, which) -> finish());
     }
 
     @Override

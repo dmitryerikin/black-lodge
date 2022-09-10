@@ -2,8 +2,6 @@ package com.dmitryerikin.android.blacklodge.Utilities;
 
 import android.util.Log;
 
-import java.nio.ByteBuffer;
-
 public class ArrayConverter {
 
     /**
